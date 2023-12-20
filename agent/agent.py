@@ -31,7 +31,7 @@ class Agent:
 			self.policy_net = DQN(state_size, self.action_size)
 			self.target_net = DQN(state_size, self.action_size)
 		self.optimizer = optim.RMSprop(self.policy_net.parameters(), lr=0.005, momentum=0.9)
-
+	
 	def act(self, state):
 		if not self.is_eval and np.random.rand() <= self.epsilon:
 			return random.randrange(self.action_size)
@@ -40,7 +40,8 @@ class Agent:
 		options = self.target_net(tensor)
 		return np.argmax(options[0].detach().numpy())
 
-	def optimize(self):
+	# 批量優化 (避免單次優化過快導致梯度收斂)
+	def optimize(self): 
 		if len(self.memory) < self.batch_size:
 				return
 		transitions = self.memory.sample(self.batch_size)
