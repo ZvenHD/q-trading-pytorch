@@ -3,14 +3,16 @@ from agent.memory import Transition, ReplayMemory
 from functions import *
 import sys
 import torch
-
+# sys 為檔案塊 如同在 terminal 端 打 train.py 就會執行 但是 如果 train.py stock window episodes 去執行 那就是執行 train 這個程式碼 並且輸入參數依序為 stock windo episodes 
 if len(sys.argv) != 4:
 	print("Usage: python train.py [stock] [window] [episodes]")
 	exit()
 
 stock_name, window_size, episode_count = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
 
+# 初始化 代理人
 agent = Agent(window_size)
+# 獲取資料
 data = getStockDataVec(stock_name)
 l = len(data) - 1
 
@@ -46,7 +48,7 @@ for e in range(episode_count + 1):
 			print("--------------------------------")
 			print("Total Profit: " + formatPrice(total_profit))
 			print("--------------------------------")
-
+		# 最後的最後 優化
 		agent.optimize()
 
 	if e % 10 == 0:
